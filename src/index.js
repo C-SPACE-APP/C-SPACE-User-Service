@@ -1,8 +1,15 @@
 const express = require('express')
+const { databaseConnection } = require('./database')
 const server = require('./server')
 
 const start = async () => {
     const app = express()
+
+    try {
+        await databaseConnection()
+    } catch(err) {
+        return
+    }
 
     await server(app)
 
