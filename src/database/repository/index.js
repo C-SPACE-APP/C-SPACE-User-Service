@@ -3,7 +3,6 @@ const { User } = require('../models')
 class UserRepository {
     async FindUsers(pattern) {
         try {
-            console.log(pattern);
             const users = await User.find({
                 $or: [
                     { givenName: {$regex: new RegExp(pattern), $options: 'i'} },
@@ -16,6 +15,16 @@ class UserRepository {
             throw err
         }
     }
+
+    async FindUser(id) {
+        try {
+            const user = await User.findOne({_id:id})
+            return user
+        } catch(err) {
+            throw err
+        }
+    }
+    
 }
 
 module.exports = UserRepository
