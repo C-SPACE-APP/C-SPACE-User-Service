@@ -7,6 +7,39 @@ class UserService {
         this.repository = new UserRepository()
     }
 
+    async AddUser(userData) {
+        const {
+            googleId,
+            email,
+            givenName,
+            lastName,
+            username,
+            password,
+            batch,
+            college,
+            course
+        } = userData
+
+        try {
+            const user = await this.repository.CreateUser({
+                googleId,
+                email,
+                givenName,
+                lastName,
+                username,
+                password,
+                batch,
+                college,
+                course
+            })
+
+            return(user)
+        } catch (err) {
+            console.log(`Error in UserService: AddUser: ${err}`)
+            throw err
+        }
+    }
+
     async GetUsers(filter) {
         const blankPattern = /\S/g
 
@@ -21,6 +54,7 @@ class UserService {
 
             return(users)
         } catch(err) {
+            console.log(`Error in UserService: GetUser: ${err}`)
             throw err
         }
     }
@@ -40,6 +74,31 @@ class UserService {
             return(user)
         } catch(err) {
             throw `Error searching for User. Error: ${err}`
+        }
+    }
+
+    async GetUserByGoogleId(id) {
+        try {
+            const user = await this.repository.FindUserByGoogleId(id)
+            return(user)
+        } catch(err) {
+            throw `Error searching for User. Error: ${err}`
+        }
+    }
+
+    async SubscribeEvents(payload){
+ 
+        const { event, data } =  payload;
+        const { userId, googleId } = data;
+
+        switch(event){
+            case 'FIND_BY_GOOGLE_ID':
+                return this.GetUserByGoogleId(googleId)
+            case 'ADD_USER':
+                return this.AddUser(data)
+            default:
+                console.log(`Inside event`);
+                break
         }
     }
 

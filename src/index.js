@@ -13,7 +13,7 @@ const start = async () => {
 
     await server(app)
 
-    const PORT = process.env.PORT || 3001
+    const PORT = process.env.PORT || 3002
 
     app.listen(PORT, (err) => {
         if(err) console.log(`Error starting app: ${err}`)
