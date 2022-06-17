@@ -1,10 +1,12 @@
 const UserService = require('../services')
 
+const { Authorize } = require('../middlewares')
+
 const UserAPI = (app) => {
 
     const service = new UserService()
 
-    app.get('/', async (req, res) => {
+    app.get('/', Authorize(), async (req, res) => {
         const { search } = req.query
 
         try {
