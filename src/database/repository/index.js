@@ -41,7 +41,6 @@ class UserRepository {
 
     async FindUserByGoogleId(id) {
         try {
-            console.log(id);
             const user = await User.findOne({googleId:id})
             return user
         } catch(err) {
