@@ -17,7 +17,7 @@ const start = async () => {
 
     app.listen(PORT, (err) => {
         if(err) console.log(`Error starting app: ${err}`)
-        else console.log(`Started listening on port ${PORT}`)
+        else console.log(`User Service started listening on port ${PORT}`)
     })
 }
 
