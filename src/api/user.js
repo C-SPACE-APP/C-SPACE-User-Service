@@ -1,11 +1,12 @@
 const UserService = require('../services')
-
 const { Authorize } = require('../middlewares')
+
 
 const UserAPI = (app) => {
 
     const service = new UserService()
 
+    /** */
     app.get('/', Authorize(), async (req, res) => {
         const { search } = req.query
 
@@ -19,14 +20,27 @@ const UserAPI = (app) => {
 
     })
 
+    /** */
     app.get('/:id', async (req, res) => {
         const { id } = req.params
 
         try {
-            const data = await service.GetUser(id)
-            return res.json(data)
+            const { status, message, user } = await service.GetUser(id)
+            return res.status(status).json({ message, user })
         } catch(err) {
             console.log(`Error in GET one user: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
+    /** */
+    app.patch('/:id', async (req, res) => {
+        const { id } = req.params
+
+        try {
+
+        } catch(err) {
+            console.log(`Error in PATCH user: ${err}`);
             return res.status(500).json({ err })
         }
     })

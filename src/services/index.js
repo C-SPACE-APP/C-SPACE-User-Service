@@ -1,12 +1,13 @@
-const { UserRepository } = require('../database')
-const mongoose = require('mongoose')
+const { UserRepository, DBUtils } = require('../database')
 
 class UserService {
 
     constructor() {
         this.repository = new UserRepository()
+        this.utils = new DBUtils()
     }
 
+    /** */
     async AddUser(userData) {
         const {
             googleId,
@@ -40,6 +41,7 @@ class UserService {
         }
     }
 
+    /** */
     async GetUsers(filter) {
         const blankPattern = /\S/g
 
@@ -59,24 +61,30 @@ class UserService {
         }
     }
 
+    /** */
     async GetUser(id) {
-        try {
-            mongoose.Types.ObjectId(id)
-        } catch(err) {
-            throw `Invalid id '${id}'`
-        }
+        const objID = await this.utils.validID(id)
+        if(!objID) return res.status(400).json({ message: `Invalid ID: ${id}`})
 
         try {
             const user = await this.repository.FindUser(id)
 
-            if(!user) throw `User ${id} not found`
+            if(!user) return({
+                status: 400,
+                message: `User ${id} not found`,
+                user
+            })
             
-            return(user)
+            return({
+                status: 200,
+                user
+            })
         } catch(err) {
             throw `Error searching for User. Error: ${err}`
         }
     }
 
+    /** */
     async GetUserByGoogleId(id) {
         try {
             const user = await this.repository.FindUserByGoogleId(id)
@@ -86,6 +94,7 @@ class UserService {
         }
     }
 
+    /** */
     async SubscribeEvents(payload){
  
         const { event, data } =  payload;
