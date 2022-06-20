@@ -56,6 +56,8 @@ User.pre("save", function(next) {
   if(user.isModified('course') && typeof user.course === 'string') {
     user.course = user.course.toUpperCase()
   }
+
+  user.updatedAt = Date.now()
   return next()
 });
 
