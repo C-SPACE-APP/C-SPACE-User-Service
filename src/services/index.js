@@ -64,7 +64,10 @@ class UserService {
     /** */
     async GetUser(id) {
         const objID = await this.utils.validID(id)
-        if(!objID) return res.status(400).json({ message: `Invalid ID: ${id}`})
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${id}`
+        })
 
         try {
             const user = await this.repository.FindUser(id)
@@ -91,6 +94,37 @@ class UserService {
             return(user)
         } catch(err) {
             throw `Error searching for User. Error: ${err}`
+        }
+    }
+
+    /** */
+    async UpdateUser({ id, username, batch, college, course }){
+        const objID = await this.utils.validID(id)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${id}`
+        })
+
+        const details = await this.utils.sanitize({ username, batch, college, course })
+
+        if(Object.keys(details).length === 0 ) return({
+            status: 400,
+            message: `Invalid new values for user ${id}`
+        })
+
+        try {
+            const user = await this.repository.EditUser(id, details)
+            if(!user) return({
+                status: 400,
+                message: `Unable to edit user`
+            })
+
+            return({
+                status: 200,
+                user
+            })
+        } catch(err) {
+            throw `Error updating User. Error: ${err}`
         }
     }
 

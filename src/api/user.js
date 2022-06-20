@@ -17,11 +17,10 @@ const UserAPI = (app) => {
             console.log(`Error in GET many users: ${err}`);
             return res.status(500).json({ err })
         }
-
     })
 
     /** */
-    app.get('/:id', async (req, res) => {
+    app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
 
         try {
@@ -34,11 +33,14 @@ const UserAPI = (app) => {
     })
 
     /** */
+    // app.patch('/:id', Authorize('OWNER'), async (req, res) => {  // AUTH IS DISABLED FOR TESTING PURPOSES
     app.patch('/:id', async (req, res) => {
         const { id } = req.params
+        const { batch, course, college, username } = req.body
 
         try {
-
+            const { status, message, user } = await service.UpdateUser({ id, username, batch, course, college })
+            return res.status(status).json({ message })
         } catch(err) {
             console.log(`Error in PATCH user: ${err}`);
             return res.status(500).json({ err })
