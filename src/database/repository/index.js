@@ -15,6 +15,40 @@ class UserRepository {
     }
 
     /** */
+    async DeleteUser(id) {
+        try {
+            const user = await User.deleteOne({ _id: id })
+            return user
+        } catch(err) {
+            console.log(`Error in UserRepository: DeleteUser: ${err}`)
+            throw err
+        }
+    }
+
+    /** */
+    async EditUser(id, details) {
+        try{
+            let user = await User.findOne({_id:id})
+            console.log(user)
+
+            if(!user) return user
+
+            for(const key in details) {
+                user[key] = details[key]
+            }
+
+            user = await user.save()
+           
+            if(!user) throw `Error updating user ${id}`
+
+            return user
+        } catch(err) {
+            console.log(`Error in UserRepository: EditUser: ${err}`)
+            throw err
+        }
+    }
+
+    /** */
     async FindUsers(pattern) {
         try {
             const users = await User.find({
@@ -53,29 +87,6 @@ class UserRepository {
         }
     }
 
-    /** */
-    async EditUser(id, details) {
-        try{
-            let user = await User.findOne({_id:id})
-            console.log(user)
-
-            if(!user) return user
-
-            for(const key in details) {
-                user[key] = details[key]
-            }
-
-            user = await user.save()
-           
-            if(!user) throw `Error updating user ${id}`
-
-            return user
-        } catch(err) {
-            console.log(`Error in UserRepository: EditUser: ${err}`)
-            throw err
-        }
-    }
-    
 }
 
 module.exports = UserRepository

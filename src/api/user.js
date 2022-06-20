@@ -46,6 +46,19 @@ const UserAPI = (app) => {
             return res.status(500).json({ err })
         }
     })
+
+    /** */
+    // app.delete('/:id', Authorize('OWNER'), async (req, res) => {     // AUTH IS DISABLED FOR TESTING PURPOSES
+    app.delete('/:id', async (req, res) => {
+        const { id } = req.params
+        
+        try {
+            const { status, message, user } = await service.DeleteUser(id)
+            return res.status(status).json({ message, user })
+        } catch(err) {
+
+        }
+    })
 }
 
 module.exports = UserAPI

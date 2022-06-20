@@ -42,6 +42,32 @@ class UserService {
     }
 
     /** */
+    async DeleteUser(id) {
+        const objID = await this.utils.validID(id)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${id}`
+        })
+
+        try {
+            const user = await this.repository.DeleteUser(objID)
+           
+            if(!user) return({
+                status: 400,
+                message: `User ${id} not found`,
+                user
+            })
+
+            return({
+                status: 200,
+                user
+            })
+        } catch(err) {
+            throw `Error deleting User. Error: ${err}`
+        }
+    }
+
+    /** */
     async GetUsers(filter) {
         const blankPattern = /\S/g
 
