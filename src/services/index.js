@@ -34,7 +34,10 @@ class UserService {
                 course
             })
 
-            return(user)
+            return({
+                status: 200,
+                payload: { user }
+            })
         } catch (err) {
             console.log(`Error in UserService: AddUser: ${err}`)
             throw err
@@ -54,13 +57,12 @@ class UserService {
            
             if(!user) return({
                 status: 400,
-                message: `User ${id} not found`,
-                user
+                message: `User ${id} not found`
             })
 
             return({
                 status: 200,
-                user
+                payload: { user }
             })
         } catch(err) {
             throw `Error deleting User. Error: ${err}`
@@ -80,7 +82,10 @@ class UserService {
 
             const users = await this.repository.FindUsers(pattern)
 
-            return(users)
+            return({
+                status: 200,
+                payload: { users }
+            })
         } catch(err) {
             console.log(`Error in UserService: GetUser: ${err}`)
             throw err
@@ -100,13 +105,12 @@ class UserService {
 
             if(!user) return({
                 status: 400,
-                message: `User ${id} not found`,
-                user
+                message: `User ${id} not found`
             })
             
             return({
                 status: 200,
-                user
+                payload: { user }
             })
         } catch(err) {
             throw `Error searching for User. Error: ${err}`
@@ -117,7 +121,10 @@ class UserService {
     async GetUserByGoogleId(id) {
         try {
             const user = await this.repository.FindUserByGoogleId(id)
-            return(user)
+            return({
+                status: 200,
+                payload: { user }
+            })
         } catch(err) {
             throw `Error searching for User. Error: ${err}`
         }
@@ -140,6 +147,7 @@ class UserService {
 
         try {
             const user = await this.repository.EditUser(id, details)
+            
             if(!user) return({
                 status: 400,
                 message: `Unable to edit user`
@@ -147,7 +155,7 @@ class UserService {
 
             return({
                 status: 200,
-                user
+                payload: { user }
             })
         } catch(err) {
             throw `Error updating User. Error: ${err}`
@@ -168,8 +176,10 @@ class UserService {
             case 'GET_USER':
                 return this.GetUser(userId)
             default:
-                console.log(`Inside event`);
-                break
+                return({
+                    status: 400,
+                    message: `No event ${event} available`
+                })
         }
     }
 

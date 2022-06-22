@@ -11,8 +11,8 @@ const UserAPI = (app) => {
         const { search } = req.query
 
         try {
-            const data = await service.GetUsers(search)
-            return res.json(data)
+            const { status, message, payload } = await service.GetUsers(search)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET many users: ${err}`);
             return res.status(500).json({ err })
@@ -24,8 +24,8 @@ const UserAPI = (app) => {
         const { id } = req.params
 
         try {
-            const { status, message, user } = await service.GetUser(id)
-            return res.status(status).json({ message, user })
+            const { status, message, payload } = await service.GetUser(id)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET one user: ${err}`);
             return res.status(500).json({ err })
@@ -39,8 +39,8 @@ const UserAPI = (app) => {
         const { batch, course, college, username } = req.body
 
         try {
-            const { status, message, user } = await service.UpdateUser({ id, username, batch, course, college })
-            return res.status(status).json({ message })
+            const { status, message, payload } = await service.UpdateUser({ id, username, batch, course, college })
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in PATCH user: ${err}`);
             return res.status(500).json({ err })
@@ -53,8 +53,8 @@ const UserAPI = (app) => {
         const { id } = req.params
         
         try {
-            const { status, message, user } = await service.DeleteUser(id)
-            return res.status(status).json({ message, user })
+            const { status, message, payload } = await service.DeleteUser(id)
+            return res.status(status).json({ message, payload })
         } catch(err) {
 
         }
