@@ -22,6 +22,18 @@ class UserService {
         } = userData
 
         try {
+            const existing = await this.repository.FindUserByGoogleId(googleId)
+            if(existing) return({
+                status: 200,
+                message: `User ${givenName} already exist`,
+                payload: { user: existing }
+            })
+        } catch(err) {
+            console.log(`Error in UserService: AddUser: ${err}`)
+            throw err
+        }
+
+        try {
             const user = await this.repository.CreateUser({
                 googleId,
                 email,
