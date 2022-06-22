@@ -165,6 +165,8 @@ class UserService {
                 return this.GetUserByGoogleId(googleId)
             case 'ADD_USER':
                 return this.AddUser(data)
+            case 'GET_USER':
+                return this.GetUser(userId)
             default:
                 console.log(`Inside event`);
                 break
