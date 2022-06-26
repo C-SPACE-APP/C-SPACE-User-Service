@@ -19,6 +19,10 @@ const User = new mongoose.Schema({
     immutable: true, 
     required: [true, "Missing lastName"]
   },
+  photo: {
+    type: String,
+    default: null,
+  },
   username: {
     type: String, 
     default: 'user'
