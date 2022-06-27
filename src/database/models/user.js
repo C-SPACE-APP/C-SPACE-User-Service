@@ -54,11 +54,28 @@ const User = new mongoose.Schema({
   },
 });
 
-User.pre("save", function(next) {
+User.pre("save", async function(next) {
   const user = this;
 
   if(user.isModified('course') && typeof user.course === 'string') {
     user.course = user.course.toUpperCase()
+  }
+
+  if(user.isNew) {
+    const users = await mongoose.model('User', User).find({
+      username: { $regex: new RegExp('^c-spacer[0-9]{4}$') }
+    })
+    .sort({ username: -1 })
+
+    if(users.length === 0) {
+      user.username = "c-spacer0000"
+    }
+    else {
+      const code = users[0].username.replace(/c-spacer/g, "")
+      const number = String(parseInt(code) + 1)
+      const newUsername = `c-spacer${'0'.repeat(4-number.length)}${number}`
+      user.username = newUsername
+    }
   }
 
   user.updatedAt = Date.now()
