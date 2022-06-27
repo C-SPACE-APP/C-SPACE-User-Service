@@ -33,8 +33,8 @@ const UserAPI = (app) => {
     })
 
     /** */
-    // app.patch('/:id', Authorize('OWNER'), async (req, res) => {  // AUTH IS DISABLED FOR TESTING PURPOSES
-    app.patch('/:id', async (req, res) => {
+    app.patch('/:id', Authorize('OWNER'), async (req, res) => {  // AUTH IS DISABLED FOR TESTING PURPOSES
+    // app.patch('/:id', async (req, res) => {
         const { id } = req.params
         const { batch, course, college, username } = req.body
 
@@ -48,8 +48,8 @@ const UserAPI = (app) => {
     })
 
     /** */
-    // app.delete('/:id', Authorize('OWNER'), async (req, res) => {     // AUTH IS DISABLED FOR TESTING PURPOSES
-    app.delete('/:id', async (req, res) => {
+    app.delete('/:id', Authorize('OWNER'), async (req, res) => {     // AUTH IS DISABLED FOR TESTING PURPOSES
+    // app.delete('/:id', async (req, res) => {
         const { id } = req.params
         
         try {
