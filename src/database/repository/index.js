@@ -49,7 +49,10 @@ class UserRepository {
     }
 
     /** */
-    async FindUsers(pattern) {
+    async FindUsers({ pattern, count, page } = {}) {
+        const limit = count || 10
+        const skip = page ? (page-1)*limit : 0
+
         try {
             const users = await User.find({
                 $or: [
@@ -58,7 +61,21 @@ class UserRepository {
                     { username: {$regex: new RegExp(pattern), $options: 'i'} }
                 ]
             })
-            return users
+            .sort({ username: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean()
+
+            const resultCount = await User.countDocuments({
+                $or: [
+                    { givenName: {$regex: new RegExp(pattern), $options: 'i'} },
+                    { lastName: {$regex: new RegExp(pattern), $options: 'i'} },
+                    { username: {$regex: new RegExp(pattern), $options: 'i'} }
+                ]
+            })
+            const lastPage = Math.floor(resultCount/limit) + (resultCount%limit ? 1 : 0) || 1
+
+            return { users, resultCount, lastPage }
         } catch(err) {
             console.log(`Error in UserRepository: FindUsers: ${err}`)
             throw err

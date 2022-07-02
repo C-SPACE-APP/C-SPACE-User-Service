@@ -84,21 +84,17 @@ class UserService {
     }
 
     /** */
-    async GetUsers(filter) {
-        const blankPattern = /\S/g
+    async GetUsers({ search, limit, page } = {}) {
+        let { search:pattern } = await this.utils.sanitize({ search })
+
+        if(!pattern) pattern = ".*"
 
         try {
-            let pattern = filter
-
-            if(!filter || typeof filter !== 'string' || !filter.match(blankPattern)) {
-                pattern = ".*"
-            }
-
-            const users = await this.repository.FindUsers(pattern)
+            const { users, resultCount, lastPage } = await this.repository.FindUsers(pattern)
 
             return({
                 status: 200,
-                payload: { users }
+                payload: { users, resultCount, lastPage }
             })
         } catch(err) {
             console.log(`Error in UserService: GetUser: ${err}`)
