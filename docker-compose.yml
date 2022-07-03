@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    container_name: user-service
+    build: .
+    ports:
+      - '80:3002'
+    depends_on:
+      - user-db
+    networks:
+      - cspace-backend
+      - user-network
+        
+  user-db:
+    container_name: user-db
+    image: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - user-network
+
+networks:
+   cspace-backend:
+      external: true
+   user-network:
+      external: true
