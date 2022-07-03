@@ -4,7 +4,7 @@ module.exports = (type) => {
         /**
          * Check if logged in
          */
-        if(!req.session.User) {
+        if(!req.session || !req.session.User) {
             return res.status(401).json({ message: `Not logged in` })
         }
 
