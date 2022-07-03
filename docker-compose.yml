@@ -4,7 +4,7 @@ services:
     container_name: user-service
     build: .
     ports:
-      - '80:3002'
+      - '3002:3002'
     depends_on:
       - user-db
     networks:
@@ -15,7 +15,7 @@ services:
     container_name: user-db
     image: mongo
     ports:
-      - '27017:27017'
+      - '28002:27017'
     networks:
       - user-network
 

@@ -7,6 +7,11 @@ const UserAPI = (app) => {
     const service = new UserService()
 
     /** */
+    app.get('/test', async (req, res) => {
+	return res.json({ message: 'Inside User Service' })
+    })
+
+    /** */
     app.get('/', Authorize(), async (req, res) => {
         const { search } = req.query
 
