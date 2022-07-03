@@ -17,4 +17,4 @@ RUN chmod +x ./wait-for-it.sh
 
 RUN npm install -g pm2
 
-CMD ./wait-for-it.sh mongo:28003 -- pm2-runtime start npm -- start
+CMD ./wait-for-it.sh user-db:28002 -- pm2-runtime start npm -- start
